@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -27,6 +28,8 @@ func main() {
 
 		if ping(ip) {
 			fmt.Printf("%s is ONLINE\n", ip)
+		} else {
+			fmt.Printf("%s is UNREACHABLE\n", ip)
 		}
 	}
 }
@@ -37,10 +40,14 @@ func generateIP(subnet string, host int) string {
 
 func ping(ip string) bool {
 
-	cmd := exec.Command("ping", "-n", "1", ip)
+	output, _ := exec.Command("ping", "-n", "1", ip).CombinedOutput()
 
-	err := cmd.Run()
+	outStr := string(output)
 
-	return err == nil
+	if strings.Contains(outStr, "Destination host unreachable.") {
+		return false
+	}
+
+	return true
 
 }
