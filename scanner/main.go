@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"os"
-	"os/exec"
-	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -26,7 +26,7 @@ func main() {
 
 		ip := generateIP(subnet, i)
 
-		if ping(ip) {
+		if isAlive(ip) {
 			fmt.Printf("%s is ONLINE\n", ip)
 		} else {
 			fmt.Printf("%s is UNREACHABLE\n", ip)
@@ -38,16 +38,24 @@ func generateIP(subnet string, host int) string {
 	return fmt.Sprintf("%s%d", subnet, host)
 }
 
-func ping(ip string) bool {
+func isAlive(ip string) bool {
 
-	output, _ := exec.Command("ping", "-n", "1", ip).CombinedOutput()
+	ports := []string{"22", "80", "443"}
 
-	outStr := string(output)
+	timeout := 300 * time.Millisecond
 
-	if strings.Contains(outStr, "Destination host unreachable.") {
-		return false
+	for _, port := range ports {
+
+		conn, err := net.DialTimeout("tcp", ip+":"+port, timeout)
+
+		if err == nil {
+			// for testing connectivity, close immediately after it connects
+			conn.Close()
+			return true
+		}
+
 	}
 
-	return true
+	return false
 
 }
