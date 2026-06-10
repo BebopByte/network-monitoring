@@ -26,16 +26,23 @@ func main() {
 
 		ip := generateIP(subnet, i)
 
-		if isAlive(ip) {
-			fmt.Printf("%s is ONLINE\n", ip)
-		} else {
-			fmt.Printf("%s is UNREACHABLE\n", ip)
-		}
+		go scan(ip)
 	}
+
+	time.Sleep(3 * time.Second) // giving goroutines some time to finish
 }
 
 func generateIP(subnet string, host int) string {
 	return fmt.Sprintf("%s%d", subnet, host)
+}
+
+func scan(ip string) {
+
+	if isAlive(ip) {
+		fmt.Printf("%s is ONLINE\n", ip)
+	} else {
+		fmt.Printf("%s is UNREACHABLE\n", ip)
+	}
 }
 
 func isAlive(ip string) bool {
