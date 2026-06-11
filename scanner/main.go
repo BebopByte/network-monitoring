@@ -3,10 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"net"
 	"os"
 	"sync"
-	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -52,45 +50,4 @@ func main() {
 
 func generateIP(subnet string, host int) string {
 	return fmt.Sprintf("%s%d", subnet, host)
-}
-
-func scan(ip string) {
-
-	if isAlive(ip) {
-		fmt.Printf("%s is ONLINE\n", ip)
-	} else {
-		fmt.Printf("%s is UNREACHABLE\n", ip)
-	}
-}
-
-func isAlive(ip string) bool {
-
-	timeout := 300 * time.Millisecond
-	ports := []string{"22", "80", "443"}
-
-	for _, port := range ports {
-
-		conn, err := net.DialTimeout("tcp", ip+":"+port, timeout)
-
-		if err == nil {
-			// for testing connectivity, close immediately after it connects
-			conn.Close()
-			return true
-		}
-
-	}
-
-	return false
-}
-
-func worker(jobs <-chan string, results chan<- string, wg *sync.WaitGroup) {
-
-	defer wg.Done()
-
-	for ip := range jobs { // receiving work
-
-		if isAlive(ip) {
-			results <- ip + " is ONLINE"
-		}
-	}
 }
