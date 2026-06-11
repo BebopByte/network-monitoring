@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -22,14 +23,31 @@ func main() {
 
 	subnet := os.Getenv("SUBNET")
 
-	for i := 1; i <= 20; i++ {
+	jobs := make(chan string, 100)
+	results := make(chan string, 100)
 
-		ip := generateIP(subnet, i)
+	var wg sync.WaitGroup
 
-		go scan(ip)
+	for i := 0; i < 20; i++ {
+		wg.Add(1)
+		go worker(jobs, results, &wg)
 	}
 
-	time.Sleep(3 * time.Second) // giving goroutines some time to finish
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	for i := 1; i <= 254; i++ {
+		jobs <- generateIP(subnet, i) // sending work
+	}
+
+	close(jobs)
+
+	// print results
+	for r := range results {
+		fmt.Println(r)
+	}
 }
 
 func generateIP(subnet string, host int) string {
@@ -47,9 +65,8 @@ func scan(ip string) {
 
 func isAlive(ip string) bool {
 
-	ports := []string{"22", "80", "443"}
-
 	timeout := 300 * time.Millisecond
+	ports := []string{"22", "80", "443"}
 
 	for _, port := range ports {
 
@@ -64,5 +81,16 @@ func isAlive(ip string) bool {
 	}
 
 	return false
+}
 
+func worker(jobs <-chan string, results chan<- string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	for ip := range jobs { // receiving work
+
+		if isAlive(ip) {
+			results <- ip + " is ONLINE"
+		}
+	}
 }
