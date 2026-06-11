@@ -19,8 +19,18 @@ func isAlive(ip string) bool {
 			conn.Close()
 			return true
 		}
-
 	}
 
 	return false
+}
+
+func getHostname(ip string) string {
+
+	names, err := net.LookupAddr(ip)
+
+	if err != nil || len(names) == 0 {
+		return "Unknown"
+	}
+
+	return names[0]
 }

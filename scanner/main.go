@@ -22,7 +22,7 @@ func main() {
 	subnet := os.Getenv("SUBNET")
 
 	jobs := make(chan string, 100)
-	results := make(chan string, 100)
+	results := make(chan Device, 100)
 
 	var wg sync.WaitGroup
 
@@ -42,9 +42,13 @@ func main() {
 
 	close(jobs)
 
-	// print results
-	for r := range results {
-		fmt.Println(r)
+	for device := range results {
+
+		fmt.Printf(
+			"IP: %-15s Hostname: %s\n",
+			device.IP,
+			device.Hostname,
+		)
 	}
 }
 
