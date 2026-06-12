@@ -6,6 +6,24 @@ import (
 	"time"
 )
 
+func DiscoverDevice(ip string) *Device {
+
+	online, responseTime := probe(ip)
+
+	if !online {
+		return nil
+	}
+
+	device := Device{
+		IP:           ip,
+		Hostname:     getHostname(ip),
+		Online:       true,
+		ResponseTime: responseTime,
+	}
+
+	return &device
+}
+
 func probe(ip string) (bool, time.Duration) {
 
 	timeout := 300 * time.Millisecond

@@ -8,18 +8,10 @@ func worker(jobs <-chan string, results chan<- Device, wg *sync.WaitGroup) {
 
 	for ip := range jobs { // receiving work
 
-		online, responseTime := probe(ip)
+		device := DiscoverDevice(ip)
 
-		if online {
-
-			device := Device{
-				IP:           ip,
-				Hostname:     getHostname(ip),
-				Online:       true,
-				ResponseTime: responseTime,
-			}
-
-			results <- device
+		if device != nil {
+			results <- *device
 		}
 	}
 }
