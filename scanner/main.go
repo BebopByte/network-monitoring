@@ -35,13 +35,10 @@ func main() {
 	for device := range results {
 
 		fmt.Printf(
-			"IP: %-15s Hostname: %s\n",
+			"IP: %-15s Hostname: %-30s Response: %v\n",
 			device.IP,
 			device.Hostname,
+			device.ResponseTime,
 		)
 	}
-}
-
-func generateIP(subnet string, host int) string {
-	return fmt.Sprintf("%s%d", subnet, host)
 }
