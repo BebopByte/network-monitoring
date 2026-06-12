@@ -2,24 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"sync"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
 
 	fmt.Println("Network Monitor Scanner Statring...")
 
-	err := godotenv.Load()
-
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	subnet := os.Getenv("SUBNET")
+	cfg := LoadConfig()
 
 	jobs := make(chan string, 100)
 	results := make(chan Device, 100)
@@ -37,7 +27,7 @@ func main() {
 	}()
 
 	for i := 1; i <= 254; i++ {
-		jobs <- generateIP(subnet, i) // sending work
+		jobs <- generateIP(cfg.Subnet, i) // sending work
 	}
 
 	close(jobs)
