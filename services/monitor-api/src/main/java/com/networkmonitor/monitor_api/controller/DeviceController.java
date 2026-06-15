@@ -14,8 +14,7 @@ public class DeviceController {
     @PostMapping
     public ResponseEntity<Void> receiveDevice( @RequestBody DeviceRequest request ) {
 
-        System.out.println("Recieved device:");
-        System.out.println(request);
+        System.out.printf("Received Device: %s (%s)%n", request.hostname(), request.ip());
 
         return ResponseEntity.ok().build();
 
