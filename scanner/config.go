@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Subnet string
+	ApiUrl string
 }
 
 func LoadConfig() Config {
@@ -21,5 +22,6 @@ func LoadConfig() Config {
 
 	return Config{
 		Subnet: os.Getenv("SUBNET"),
+		ApiUrl: os.Getenv("API_URL"),
 	}
 }

@@ -40,5 +40,11 @@ func main() {
 			device.Hostname,
 			device.ResponseTime,
 		)
+
+		err := sendDevice(device, cfg.ApiUrl)
+
+		if err != nil {
+			fmt.Println("Failed to send device: ", err)
+		}
 	}
 }
