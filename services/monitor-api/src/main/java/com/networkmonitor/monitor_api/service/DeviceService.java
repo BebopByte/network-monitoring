@@ -31,16 +31,20 @@ public class DeviceService {
     }
 
     public List<DeviceResponse> getAll(){
-
         return repository.findAll()
         .stream()
-        .map(device -> new DeviceResponse(
+        .map(device -> toResponse(device))
+        .toList();
+    }
+
+    private DeviceResponse toResponse(DeviceEntity device) {
+        return new DeviceResponse(
             device.getId(),
             device.getIp(),
             device.getHostname(),
             device.getOnline(),
             device.getResponeTimeMs()
-        )).toList();
+        );
     }
 
 }
