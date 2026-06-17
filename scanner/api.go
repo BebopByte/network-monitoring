@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type DeviceRequest struct {
@@ -12,6 +13,7 @@ type DeviceRequest struct {
 	Hostname     string `json:"hostname"`
 	Online       bool   `json:"online"`
 	ResponseTime int64  `json:"responseTimeMs"`
+	ScannedAt    string `json:"scannedAt"`
 }
 
 func sendDevice(device Device, apiUrl string) error {
@@ -21,6 +23,7 @@ func sendDevice(device Device, apiUrl string) error {
 		Hostname:     device.Hostname,
 		Online:       device.Online,
 		ResponseTime: device.ResponseTime.Milliseconds(),
+		ScannedAt:    time.Now().UTC().Format(time.RFC3339),
 	}
 
 	jsonBytes, err := json.Marshal(payload)

@@ -1,5 +1,6 @@
 package com.networkmonitor.monitor_api.service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class DeviceService {
         device.setHostname(request.hostname());
         device.setOnline(request.online());
         device.setResponseTimeMs(request.responseTimeMs());
+        device.setScannedAt(OffsetDateTime.parse(request.scannedAt()).toLocalDateTime());
 
         repository.save(device);
     }
@@ -43,7 +45,8 @@ public class DeviceService {
             device.getIp(),
             device.getHostname(),
             device.getOnline(),
-            device.getResponeTimeMs()
+            device.getResponeTimeMs(),
+            device.getScannedAt()
         );
     }
 

@@ -1,5 +1,9 @@
 package com.networkmonitor.monitor_api.domain;
 
+import java.time.LocalDateTime;
+
+import org.springframework.cglib.core.Local;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +25,8 @@ public class DeviceEntity {
     private boolean online;
 
     private long responseTimeMs;
+
+    private LocalDateTime scannedAt;
 
 
     public void setId(Long id) {
@@ -61,6 +67,14 @@ public class DeviceEntity {
 
     public Long getResponeTimeMs() {
         return this.responseTimeMs;
+    }
+
+    public void setScannedAt(LocalDateTime scannedAt) {
+        this.scannedAt = scannedAt;
+    }
+
+    public LocalDateTime getScannedAt() {
+        return this.scannedAt;
     }
 
 }

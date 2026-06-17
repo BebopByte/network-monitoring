@@ -4,5 +4,6 @@ public record DeviceRequest(
     String ip,
     String hostname,
     boolean online,
-    long responseTimeMs
+    long responseTimeMs,
+    String scannedAt
 ) {}
