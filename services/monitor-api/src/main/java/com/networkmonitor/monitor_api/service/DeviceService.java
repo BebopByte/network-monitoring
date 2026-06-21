@@ -1,6 +1,6 @@
 package com.networkmonitor.monitor_api.service;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -27,9 +27,18 @@ public class DeviceService {
         device.setHostname(request.hostname());
         device.setOnline(request.online());
         device.setResponseTimeMs(request.responseTimeMs());
-        device.setScannedAt(OffsetDateTime.parse(request.scannedAt()).toLocalDateTime());
+        device.setScannedAt(Instant.parse(request.scannedAt()));
 
         repository.save(device);
+    }
+
+    public void saveAll(List<DeviceRequest> requests) {
+
+        List<DeviceEntity> devices = requests.stream()
+            .map(device -> toEntity(device))
+            .toList();
+
+        repository.saveAll(devices);
     }
 
     public List<DeviceResponse> getAll(){
@@ -48,6 +57,19 @@ public class DeviceService {
             device.getResponeTimeMs(),
             device.getScannedAt()
         );
+    }
+
+    private DeviceEntity toEntity(DeviceRequest request) {
+        
+        DeviceEntity device = new DeviceEntity();
+
+        device.setIp(request.ip());
+        device.setHostname(request.hostname());
+        device.setOnline(request.online());
+        device.setResponseTimeMs(request.responseTimeMs());
+        device.setScannedAt(Instant.parse(request.scannedAt())); 
+
+        return device;
     }
 
 }

@@ -24,14 +24,13 @@ public class DeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> receiveDevice( @RequestBody DeviceRequest request ) {
+    public ResponseEntity<Void> receiveDevices( @RequestBody List<DeviceRequest> requests) {
 
-        System.out.printf("Received Device: %s (%s)%n", request.hostname(), request.ip());
+        System.out.printf("Received %d devices%n", requests.size());
 
-        service.save(request);
+        service.saveAll(requests);
 
         return ResponseEntity.ok().build();
-
     }
 
     @GetMapping

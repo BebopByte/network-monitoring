@@ -1,6 +1,6 @@
 package com.networkmonitor.monitor_api.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record DeviceResponse(
     Long id,
@@ -8,6 +8,6 @@ public record DeviceResponse(
     String hostname,
     boolean online,
     long responseTimeMs,
-    LocalDateTime scannedAt
+    Instant scannedAt
 ) {
 }

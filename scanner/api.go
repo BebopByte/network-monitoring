@@ -52,3 +52,33 @@ func sendDevice(device Device, apiUrl string) error {
 
 	return nil
 }
+
+func sendDevices(devices []DeviceRequest, apiUrl string) error {
+
+	jsonBytes, err := json.Marshal(devices)
+
+	if err != nil {
+		return err
+	}
+
+	response, err := http.Post(
+		apiUrl,
+		"application/json",
+		bytes.NewBuffer(jsonBytes),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	defer response.Body.Close()
+
+	fmt.Printf(
+		"Sent %d devices to monitor API (status=%d)\n",
+		len(devices),
+		response.StatusCode,
+	)
+
+	return nil
+
+}

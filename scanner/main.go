@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 func main() {
@@ -32,6 +33,8 @@ func main() {
 
 	close(jobs)
 
+	var devices []DeviceRequest
+
 	for device := range results {
 
 		fmt.Printf(
@@ -41,10 +44,18 @@ func main() {
 			device.ResponseTime,
 		)
 
-		err := sendDevice(device, cfg.ApiUrl)
+		devices = append(devices, DeviceRequest{
+			IP:           device.IP,
+			Hostname:     device.Hostname,
+			Online:       device.Online,
+			ResponseTime: device.ResponseTime.Milliseconds(),
+			ScannedAt:    time.Now().UTC().Format(time.RFC3339),
+		})
+	}
 
-		if err != nil {
-			fmt.Println("Failed to send device: ", err)
-		}
+	err := sendDevices(devices, cfg.ApiUrl)
+
+	if err != nil {
+		fmt.Println("Failed to send devices: ", err)
 	}
 }
