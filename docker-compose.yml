@@ -1,0 +1,19 @@
+version: '3.9'
+
+name: network-monitor-db
+
+services:
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: nm_app
+      POSTGRES_PASSWORD: nm_app
+      POSTGRES_DB: network_monitor
+    ports:
+      - "5432:5432"
+    volumes:
+      - network_monitor_data:/var/lib/postgresql/data
+
+volumes:
+  network_monitor_data:
