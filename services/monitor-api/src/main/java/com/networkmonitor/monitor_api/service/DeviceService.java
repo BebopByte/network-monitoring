@@ -72,4 +72,12 @@ public class DeviceService {
         return device;
     }
 
+    public List<DeviceResponse> getLatestDevices() {
+
+        return repository.findLatestDevices()
+                .stream()
+                .map(device -> toResponse(device))
+                .toList();
+    }
+
 }

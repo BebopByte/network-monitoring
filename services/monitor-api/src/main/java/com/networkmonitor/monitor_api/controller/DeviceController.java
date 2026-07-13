@@ -38,4 +38,9 @@ public class DeviceController {
         return service.getAll();
     }
 
+    @GetMapping("/latest")
+    public List<DeviceResponse> getLatestDevices() {
+        return service.getLatestDevices();
+    }
+
 }
