@@ -24,3 +24,23 @@ To stop the docker container, run the following command from root directory:
 To stop and destroy the volume, run:
     - "docker compose down -v"
 
+
+## API Endpoints
+
+## submit scan results
+
+POST /monitor-api/devices
+
+Accepts a batch of discovered devices
+
+## get scan results
+
+GET /monitor-api/devices
+
+Returns all discovered device history records
+
+#
+
+GET /monitor-api/devices/latest
+
+Returns the latest device record for each IP address
